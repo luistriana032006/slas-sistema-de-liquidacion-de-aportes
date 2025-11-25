@@ -37,7 +37,7 @@ public class LiquidacionRequest {
     public void setPorcentajeCCF(Double porcentajeCCF) {
         this.porcentajeCCF = porcentajeCCF;
     }
-
+ 
     public void setIngresos(Double ingresos) {
         this.ingresosMensual = ingresos;
     }
@@ -57,8 +57,6 @@ public class LiquidacionRequest {
     public void setAportaCCF(Boolean aportaCCF) {
         this.aportaCCF = aportaCCF;
     }
-
-   
 
     public LiquidacionRequest(Double ingresosMensual, Boolean aporteARL, Boolean aportaCCF,
             RiesgoLaboralARL nivelRiesgo, Double porcentajeCCF) {
