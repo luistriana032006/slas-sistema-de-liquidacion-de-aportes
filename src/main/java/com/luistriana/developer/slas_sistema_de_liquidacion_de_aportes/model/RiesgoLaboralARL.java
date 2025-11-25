@@ -15,12 +15,10 @@ public enum RiesgoLaboralARL {
     private RiesgoLaboralARL(Double porcentaje) {
         this.porcentaje = porcentaje;
     }
- 
+
     // getter para llamar el valor
     public Double getPorcentaje() {
         return porcentaje;
     }
-
-    
 
 }
