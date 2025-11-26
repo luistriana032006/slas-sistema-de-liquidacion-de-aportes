@@ -18,16 +18,13 @@ SLAS es una aplicación REST API que facilita el cálculo preciso de las contrib
 - 🚧 Cálculo de Caja de Compensación Familiar (CCF)
 - 🚧 Generación de reportes y certificados
 - 🚧 API REST completa
-- 🚧 Persistencia en base de datos PostgreSQL
 
 ## Tecnologías
 
 - **Java 21**
 - **Spring Boot 3.5.8**
-  - Spring Data JPA (proximamente)
   - Spring Web
   - Spring Validation
-- **PostgreSQL** (base de datos)
 - **Lombok** (reducción de código boilerplate)
 - **Maven** (gestión de dependencias)
 
@@ -37,7 +34,6 @@ Antes de ejecutar el proyecto, asegúrate de tener instalado:
 
 - Java JDK 21 o superior
 - Maven 3.6+
-- PostgreSQL 12+
 - IDE recomendado: IntelliJ IDEA o Eclipse
 
 ## Instalación
@@ -48,31 +44,12 @@ Antes de ejecutar el proyecto, asegúrate de tener instalado:
    cd slas-sistema-de-liquidacion-de-aportes
    ```
 
-2. **Configurar la base de datos**
-
-   Crea una base de datos en PostgreSQL:
-   ```sql
-   CREATE DATABASE slas_db;
-   ```
-
-3. **Configurar application.properties**
-
-   Edita `src/main/resources/application.properties` con tus credenciales:
-   ```properties
-   spring.datasource.url=jdbc:postgresql://localhost:5432/slas_db
-   spring.datasource.username=tu_usuario
-   spring.datasource.password=tu_contraseña
-
-   spring.jpa.hibernate.ddl-auto=update
-   spring.jpa.show-sql=true
-   ```
-
-4. **Compilar el proyecto**
+2. **Compilar el proyecto**
    ```bash
    mvn clean install
    ```
 
-5. **Ejecutar la aplicación**
+3. **Ejecutar la aplicación**
    ```bash
    mvn spring-boot:run
    ```
@@ -86,7 +63,7 @@ src/main/java/com/luistriana/developer/slas_sistema_de_liquidacion_de_aportes/
 ├── constants/
 │   └── ConstantesSeguridadSocial.java    # Constantes y tarifas legales
 ├── model/
-│   ├── Usuario.java                       # Entidad de usuario (en desarrollo)
+│   ├── Usuario.java                       # Modelo de usuario (en desarrollo)
 │   ├── AportesFondoSolidarioPensionesFSP.java  # Enum para FSP
 │   ├── RiesgoLaboralARL.java             # Enum para niveles de riesgo ARL
 │   └── dtos/
