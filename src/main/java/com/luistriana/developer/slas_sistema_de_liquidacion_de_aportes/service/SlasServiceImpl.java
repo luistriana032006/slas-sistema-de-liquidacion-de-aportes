@@ -1,11 +1,14 @@
 package com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.service;
 
+import org.springframework.stereotype.Service;
+
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.constants.ConstantesSeguridadSocial;
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.model.AportesFondoSolidarioPensionesFSP;
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.model.RiesgoLaboralARL;
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.model.dtos.request.LiquidacionRequest;
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.model.dtos.response.LiquidacionResponse;
 
+@Service
 public class SlasServiceImpl implements SlasService {
 
     @Override
