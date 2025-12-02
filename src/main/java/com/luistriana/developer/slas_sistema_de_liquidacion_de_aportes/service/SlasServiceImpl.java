@@ -99,4 +99,12 @@ public class SlasServiceImpl implements SlasService {
     private double porcentajeCcf(double ibc, double porcentaje) {
         return ibc * (porcentaje / 100);
     }
+
+    // metodo para consistencia de los datos 
+
+    private void validarCosistencia(LiquidacionRequest request){
+
+        
+
+    }
 }
