@@ -6,7 +6,7 @@ public enum AportesFondoSolidarioPensionesFSP {
     MAS_DE_16_HASTA_17SMMLV(0.012),
     MAS_DE_17_HASTA_18SMMLV(0.014),
     MAS_DE_18_HASTA_19SMMLV(0.016),
-    MAS_DE_19_HASTA_20(0.18),
+    MAS_DE_19_HASTA_20(0.018),
     MAS_DE_20(0.02);
 
     // variable propia para cada enum

@@ -3,6 +3,7 @@ package com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.service;
 import org.springframework.stereotype.Service;
 
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.constants.ConstantesSeguridadSocial;
+import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.exception.datosInvalidosExeception;
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.model.AportesFondoSolidarioPensionesFSP;
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.model.RiesgoLaboralARL;
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.model.dtos.request.LiquidacionRequest;
@@ -27,7 +28,7 @@ public class SlasServiceImpl implements SlasService {
             arl = porcentajeARL(request.getNivelRiesgo(), ibc);
         }
         double fsp = porcentajeFsp(ibc);
-        
+
         if (request.getAportaCCF()) {
             ccf = porcentajeCcf(ibc, request.getPorcentajeCCF());
         }
@@ -97,14 +98,28 @@ public class SlasServiceImpl implements SlasService {
 
     // calculo a CCF
     private double porcentajeCcf(double ibc, double porcentaje) {
-        return ibc * (porcentaje / 100);
+        final double EPSILON = 0.0001;
+
+        // PASO1. convertir el porcentaje que entra en decimal
+
+        double porcentajeDecimal = porcentaje / 100;
+
+        // paso 2. validar si coincide con nuestras constantes
+        if (Math.abs(porcentajeDecimal - ConstantesSeguridadSocial.PORCENTAJE_CCF_BAJO) < EPSILON) {
+            return ibc * ConstantesSeguridadSocial.PORCENTAJE_CCF_BAJO;
+        }
+
+        if (Math.abs(porcentajeDecimal - ConstantesSeguridadSocial.PORCENTAJE_CCF_ALTO) < EPSILON) {
+            return ibc * ConstantesSeguridadSocial.PORCENTAJE_CCF_ALTO;
+        }
+        throw new datosInvalidosExeception(
+                " Porcentaje CCF invalido  " + porcentaje + "%  datos permitidos 0.6%  o 2%");
+
     }
 
-    // metodo para consistencia de los datos 
+    // metodo para consistencia de los datos
 
-    private void validarCosistencia(LiquidacionRequest request){
-
-        
+    private void validarCosistencia(LiquidacionRequest request) {
 
     }
 }
