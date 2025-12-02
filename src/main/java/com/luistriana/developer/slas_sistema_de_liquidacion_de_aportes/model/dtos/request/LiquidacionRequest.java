@@ -2,11 +2,26 @@ package com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.model.dt
 
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.model.RiesgoLaboralARL;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
+
 public class LiquidacionRequest {
 
+    @NotNull
+    @Positive
     private Double ingresosMensual;
+
+    @NotNull
     private Boolean aporteARL;
+
+    @NotNull
     private Boolean aportaCCF;
+
+    /** 
+     * como dependen de unas condiciones dadas debemos 
+     * manejar su estado de ingreso en el service 
+     */
     private RiesgoLaboralARL nivelRiesgo;
     private Double porcentajeCCF;
 
