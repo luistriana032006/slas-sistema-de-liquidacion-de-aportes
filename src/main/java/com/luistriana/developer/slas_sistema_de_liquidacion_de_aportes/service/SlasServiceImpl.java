@@ -3,7 +3,7 @@ package com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.service;
 import org.springframework.stereotype.Service;
 
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.constants.ConstantesSeguridadSocial;
-import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.exception.datosInvalidosExeception;
+import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.exception.datosInvalidosException;
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.model.AportesFondoSolidarioPensionesFSP;
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.model.RiesgoLaboralARL;
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.model.dtos.request.LiquidacionRequest;
@@ -15,6 +15,7 @@ public class SlasServiceImpl implements SlasService {
     @Override
     public LiquidacionResponse calculoSlas(LiquidacionRequest request) {
 
+        validarConsistencia(request);
         // variables de validaciones
 
         double arl = 0.0;
@@ -112,14 +113,54 @@ public class SlasServiceImpl implements SlasService {
         if (Math.abs(porcentajeDecimal - ConstantesSeguridadSocial.PORCENTAJE_CCF_ALTO) < EPSILON) {
             return ibc * ConstantesSeguridadSocial.PORCENTAJE_CCF_ALTO;
         }
-        throw new datosInvalidosExeception(
+        throw new datosInvalidosException(
                 " Porcentaje CCF invalido  " + porcentaje + "%  datos permitidos 0.6%  o 2%");
 
     }
 
     // metodo para consistencia de los datos
 
-    private void validarCosistencia(LiquidacionRequest request) {
+    private void validarConsistencia(LiquidacionRequest request) {
 
+        // validaciones de ingreso 
+
+        if (request.getIngresos() <0){
+            throw new datosInvalidosException("el ingreso"+request.getIngresos()+" debe ser mayor a cero");
+        }
+        // validaciones para CCF
+        /**
+         * que pasa si en aporte ccf envian un true pero en el porcentaje envian null,
+         */
+        if (Boolean.TRUE.equals(request.getAportaCCF()) && request.getPorcentajeCCF() == null) {
+            throw new datosInvalidosException(" no puede enviar un null en el porcentaje del request");
+        }
+
+        /**
+         * que pasa si en aporte ccf enviand un false pero en el porcentaje envian un
+         * dato
+         */
+        if (Boolean.TRUE.equals(request.getPorcentajeCCF() != null) && request.getAportaCCF() ) {
+            throw new datosInvalidosException(" no puede enviar un false si va a enviar un porcentaje a cotizacion");
+        }
+
+        // validaciones apra ARL
+
+        /**
+         * que pasa si en aporteARL envian un true y no envian un nivel de riesgo
+         * 
+         */
+        if (Boolean.TRUE.equals(request.getAporteARL()) && request.getNivelRiesgo() == null) {
+            throw new datosInvalidosException(
+                    "no se puede hacer la peticion por que no envio nada en el nivel de riesgo");
+        }
+
+        /**
+         * que pasa si en aporte ARL envian un flase y envina un nivel de riesgo
+         * 
+         */
+        if (request.getNivelRiesgo() != null && Boolean.TRUE.equals(request.getAporteARL() )) {
+            throw new datosInvalidosException("No puede enviar un nivel de riesgo si aporteARL es false");
+        }
     }
+
 }
