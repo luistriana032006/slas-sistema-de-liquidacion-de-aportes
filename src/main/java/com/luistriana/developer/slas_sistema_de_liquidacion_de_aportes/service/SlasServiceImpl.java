@@ -1,5 +1,7 @@
 package com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.service;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
 import com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.constants.ConstantesSeguridadSocial;
@@ -56,18 +58,19 @@ public class SlasServiceImpl implements SlasService {
 
         // operacion del metodo
 
-        return ibc;
+        return Math.round(ibc);
     }
 
     private double porcentajeSalud(double ibc) {
 
         double salud = ibc * ConstantesSeguridadSocial.SALUD;
-        return salud;
+        return Math.round(salud);
     }
 
     private double porcentajePension(double ibc) {
         double pension = ibc * ConstantesSeguridadSocial.PENSION;
-        return pension;
+        
+        return Math.round(pension);
     }
 
     private double porcentajeFsp(double ibc) {
@@ -79,7 +82,7 @@ public class SlasServiceImpl implements SlasService {
          */
         AportesFondoSolidarioPensionesFSP rango = AportesFondoSolidarioPensionesFSP.ObtenerRango(ibcEnSMMLV);
 
-        return ibc * rango.getPorcentaje();
+        return Math.round(ibc) * rango.getPorcentaje();
     }
 
     // calculo de la ARl que depende que envien un true en el campo de que si quiee
@@ -94,7 +97,7 @@ public class SlasServiceImpl implements SlasService {
 
         double porcentajeArl = ibc * porcentajeRiesgo;
 
-        return porcentajeArl;
+        return Math.round(porcentajeArl);
     }
 
     // calculo a CCF
@@ -107,11 +110,11 @@ public class SlasServiceImpl implements SlasService {
 
         // paso 2. validar si coincide con nuestras constantes
         if (Math.abs(porcentajeDecimal - ConstantesSeguridadSocial.PORCENTAJE_CCF_BAJO) < EPSILON) {
-            return ibc * ConstantesSeguridadSocial.PORCENTAJE_CCF_BAJO;
+            return Math.round(ibc) * ConstantesSeguridadSocial.PORCENTAJE_CCF_BAJO;
         }
 
         if (Math.abs(porcentajeDecimal - ConstantesSeguridadSocial.PORCENTAJE_CCF_ALTO) < EPSILON) {
-            return ibc * ConstantesSeguridadSocial.PORCENTAJE_CCF_ALTO;
+            return Math.round(ibc) * ConstantesSeguridadSocial.PORCENTAJE_CCF_ALTO;
         }
         throw new datosInvalidosException(
                 " Porcentaje CCF invalido  " + porcentaje + "%  datos permitidos 0.6%  o 2%");
