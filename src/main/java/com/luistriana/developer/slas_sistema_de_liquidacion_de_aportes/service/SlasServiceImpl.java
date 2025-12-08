@@ -104,51 +104,44 @@ public class SlasServiceImpl implements SlasService {
 
         // validaciones de ingreso
 
-        if (request.getIngresos() < 0) {
-            throw new datosInvalidosException("el ingreso" + request.getIngresos() + " debe ser mayor a cero");
-        }
-        // validaciones para CCF
-        /**
-         * que pasa si en aporte ccf envian un true pero en el porcentaje envian null,
-         */
-        if (Boolean.TRUE.equals(request.getAportaCCF()) && request.getPorcentajeCCF() == null) {
-            throw new datosInvalidosException(" no puede enviar un null en el porcentaje del request");
-        }
+ // Validación de ingreso
+    if (request.getIngresos() <= 0) {  // Cambié < a <=
+        throw new datosInvalidosException(
+            "El ingreso debe ser mayor a cero. Recibido: " + request.getIngresos());
+    }
 
-        /**
-         * que pasa si en aporte ccf enviand un false pero en el porcentaje envian un
-         * dato
-         */
-        if (Boolean.TRUE.equals(request.getPorcentajeCCF() != null) && request.getAportaCCF()) {
-            throw new datosInvalidosException(" no puede enviar un false si va a enviar un porcentaje a cotizacion");
-        }
+    // Validación CCF: si aporta TRUE pero porcentaje es null
+    if (request.getAportaCCF() && request.getPorcentajeCCF() == null) {
+        throw new datosInvalidosException(
+            "Si aporta a CCF, debe especificar porcentaje (0.6 o 2.0)");
+    }
 
-        // validaciones apra ARL
+    // Validación CCF: si aporta FALSE pero envía porcentaje
+    if (request.getPorcentajeCCF() != null && !request.getAportaCCF()) {
+        throw new datosInvalidosException(
+            "No puede enviar porcentaje si aporteVoluntarioCCF es false");
+    }
 
-        /**
-         * que pasa si en aporteARL envian un true y no envian un nivel de riesgo
-         * 
-         */
-        if (Boolean.TRUE.equals(request.getAporteARL()) && request.getNivelRiesgo() == null) {
+    // Validación CCF: porcentaje debe ser 0.6 o 2.0
+    if (request.getAportaCCF() && request.getPorcentajeCCF() != null) {
+        double p = request.getPorcentajeCCF();
+        if (p != 0.6 && p != 2.0) {
             throw new datosInvalidosException(
-                    "no se puede hacer la peticion por que no envio nada en el nivel de riesgo");
+                "Porcentaje CCF debe ser 0.6 o 2.0, recibido: " + p);
         }
+    }
 
-        /**
-         * que pasa si en aporte ARL envian un flase y envina un nivel de riesgo
-         * 
-         */
-        if (request.getNivelRiesgo() != null && Boolean.TRUE.equals(request.getAporteARL())) {
-            throw new datosInvalidosException("No puede enviar nivel de riesgo si aporteVoluntarioARL es false");
-        }
+    // Validación ARL: si aporta TRUE pero nivel es null
+    if (request.getAporteARL() && request.getNivelRiesgo() == null) {
+        throw new datosInvalidosException(
+            "Si aporta a ARL, debe especificar nivel de riesgo");
+    }
 
-        if (request.getAportaCCF() && request.getPorcentajeCCF() != null){
-            double p = request.getPorcentajeCCF();
-
-            if (p != 0.6 && p !=2.0) {
-                throw new datosInvalidosException("porcentaje CCF deb ser 0.6 o 2.0, recibido: "+p);
-            }
-        }
+    // Validación ARL: si aporta FALSE pero envía nivel
+    if (request.getNivelRiesgo() != null && !request.getAporteARL()) {
+        throw new datosInvalidosException(
+            "No puede enviar nivel de riesgo si aporteVoluntarioARL es false");
+    }
     }
 
 }
