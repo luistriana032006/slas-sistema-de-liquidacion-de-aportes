@@ -69,7 +69,7 @@ public class SlasServiceImpl implements SlasService {
 
     private double porcentajePension(double ibc) {
         double pension = ibc * ConstantesSeguridadSocial.PENSION;
-        
+
         return Math.round(pension);
     }
 
@@ -89,46 +89,23 @@ public class SlasServiceImpl implements SlasService {
     // enviar algo a la ARL
     private double porcentajeARL(RiesgoLaboralARL nivel, double ibc) {
 
-        // al ibc le vamos a calcular el porcentaje
-        // recibimos el nivel de riesgo de arl
-
-        // TODO: SIMPLIFICAR ESTOS CALCULOS PARA QUITAR VARIABLES TEMPORALES
-        double porcentajeRiesgo = nivel.getPorcentaje();
-
-        double porcentajeArl = ibc * porcentajeRiesgo;
-
-        return Math.round(porcentajeArl);
+        return Math.round(ibc * (nivel.getPorcentaje() / 100));
     }
 
     // calculo a CCF
     private double porcentajeCcf(double ibc, double porcentaje) {
-        final double EPSILON = 0.0001;
 
-        // PASO1. convertir el porcentaje que entra en decimal
-
-        double porcentajeDecimal = porcentaje / 100;
-
-        // paso 2. validar si coincide con nuestras constantes
-        if (Math.abs(porcentajeDecimal - ConstantesSeguridadSocial.PORCENTAJE_CCF_BAJO) < EPSILON) {
-            return Math.round(ibc) * ConstantesSeguridadSocial.PORCENTAJE_CCF_BAJO;
-        }
-
-        if (Math.abs(porcentajeDecimal - ConstantesSeguridadSocial.PORCENTAJE_CCF_ALTO) < EPSILON) {
-            return Math.round(ibc) * ConstantesSeguridadSocial.PORCENTAJE_CCF_ALTO;
-        }
-        throw new datosInvalidosException(
-                " Porcentaje CCF invalido  " + porcentaje + "%  datos permitidos 0.6%  o 2%");
-
+        return Math.round(ibc * (porcentaje / 100));
     }
 
     // metodo para consistencia de los datos
 
     private void validarConsistencia(LiquidacionRequest request) {
 
-        // validaciones de ingreso 
+        // validaciones de ingreso
 
-        if (request.getIngresos() <0){
-            throw new datosInvalidosException("el ingreso"+request.getIngresos()+" debe ser mayor a cero");
+        if (request.getIngresos() < 0) {
+            throw new datosInvalidosException("el ingreso" + request.getIngresos() + " debe ser mayor a cero");
         }
         // validaciones para CCF
         /**
@@ -142,7 +119,7 @@ public class SlasServiceImpl implements SlasService {
          * que pasa si en aporte ccf enviand un false pero en el porcentaje envian un
          * dato
          */
-        if (Boolean.TRUE.equals(request.getPorcentajeCCF() != null) && request.getAportaCCF() ) {
+        if (Boolean.TRUE.equals(request.getPorcentajeCCF() != null) && request.getAportaCCF()) {
             throw new datosInvalidosException(" no puede enviar un false si va a enviar un porcentaje a cotizacion");
         }
 
@@ -161,8 +138,16 @@ public class SlasServiceImpl implements SlasService {
          * que pasa si en aporte ARL envian un flase y envina un nivel de riesgo
          * 
          */
-        if (request.getNivelRiesgo() != null && Boolean.TRUE.equals(request.getAporteARL() )) {
-            throw new datosInvalidosException("No puede enviar un nivel de riesgo si aporteARL es false");
+        if (request.getNivelRiesgo() != null && Boolean.TRUE.equals(request.getAporteARL())) {
+            throw new datosInvalidosException("No puede enviar nivel de riesgo si aporteVoluntarioARL es false");
+        }
+
+        if (request.getAportaCCF() && request.getPorcentajeCCF() != null){
+            double p = request.getPorcentajeCCF();
+
+            if (p != 0.6 && p !=2.0) {
+                throw new datosInvalidosException("porcentaje CCF deb ser 0.6 o 2.0, recibido: "+p);
+            }
         }
     }
 
