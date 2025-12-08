@@ -1,136 +1,143 @@
 # SLAS - Sistema de Liquidación de Aportes a Seguridad Social
 
-> **Estado del Proyecto:** 🚧 En Desarrollo Activo
+## 📋 Descripción
 
-Sistema backend desarrollado en Spring Boot para el cálculo y liquidación automatizada de aportes a la seguridad social en Colombia, incluyendo salud, pensión, ARL y parafiscales.
+API REST para calcular aportes a seguridad social de trabajadores independientes en Colombia (contrato de prestación de servicios).
 
-## Descripción
+**Versión actual:** 1.0.0 (en desarrollo activo)
 
-SLAS es una aplicación REST API que facilita el cálculo preciso de las contribuciones a la seguridad social según la normativa colombiana vigente. El sistema permite calcular aportes basándose en los ingresos mensuales del trabajador, aplicando las tarifas y límites establecidos por ley.
+## 🚀 Características v1.0
 
-### Características Principales (En Desarrollo)
+- ✅ Cálculo de IBC (Ingreso Base de Cotización) con límites legales
+- ✅ Aportes obligatorios: Salud (12.5%), Pensión (16%)
+- ✅ Fondo de Solidaridad Pensional (FSP) según tabla progresiva
+- ✅ Aportes voluntarios: ARL (5 niveles de riesgo) y CCF (0.6% o 2%)
+- ✅ Validaciones de datos y consistencia
+- ✅ Redondeo de valores monetarios
+- ✅ Documentación con Swagger/OpenAPI
 
-- ✅ Cálculo de aportes a salud (12.5%)
-- ✅ Cálculo de aportes a pensión (16%)
-- ✅ Cálculo de aportes a Riesgos Laborales (ARL) según nivel de riesgo
-- ✅ Cálculo de Fondo de Solidaridad Pensional (FSP)
-- 🚧 Gestión de usuarios y empleados
-- 🚧 Cálculo de Caja de Compensación Familiar (CCF)
-- 🚧 Generación de reportes y certificados
-- 🚧 API REST completa
+## 🛠️ Tecnologías
 
-## Tecnologías
+- Java 21
+- Spring Boot 3.5.8
+- Maven
+- SpringDoc OpenAPI (Swagger)
 
-- **Java 21**
-- **Spring Boot 3.5.8**
-  - Spring Web
-  - Spring Validation
-- **Lombok** (reducción de código boilerplate)
-- **Maven** (gestión de dependencias)
+## 📦 Instalación
 
-## Requisitos Previos
+### Requisitos previos
 
-Antes de ejecutar el proyecto, asegúrate de tener instalado:
+Antes de instalar, asegúrate de tener:
 
-- Java JDK 21 o superior
-- Maven 3.6+
-- IDE recomendado: IntelliJ IDEA o Eclipse
+- **Java 21** o superior ([Descargar](https://adoptium.net/))
+- **Maven 3.6+** ([Descargar](https://maven.apache.org/download.cgi))
+- **Git** ([Descargar](https://git-scm.com/downloads))
 
-## Instalación
-
-1. **Clonar el repositorio**
-   ```bash
-   git clone https://github.com/tu-usuario/slas-sistema-de-liquidacion-de-aportes.git
-   cd slas-sistema-de-liquidacion-de-aportes
-   ```
-
-2. **Compilar el proyecto**
-   ```bash
-   mvn clean install
-   ```
-
-3. **Ejecutar la aplicación**
-   ```bash
-   mvn spring-boot:run
-   ```
-
-La aplicación estará disponible en `http://localhost:8080`
-
-## Estructura del Proyecto
-
-```
-src/main/java/com/luistriana/developer/slas_sistema_de_liquidacion_de_aportes/
-├── constants/
-│   └── ConstantesSeguridadSocial.java    # Constantes y tarifas legales
-├── model/
-│   ├── Usuario.java                       # Modelo de usuario (en desarrollo)
-│   ├── AportesFondoSolidarioPensionesFSP.java  # Enum para FSP
-│   ├── RiesgoLaboralARL.java             # Enum para niveles de riesgo ARL
-│   └── dtos/
-│       ├── request/
-│       │   └── LiquidacionRequest.java   # DTO de entrada
-│       └── response/
-│           └── LiquidacionResponse.java  # DTO de salida
-├── service/                               # Servicios de negocio (próximamente)
-├── controller/                            # Controladores REST (próximamente)
-└── SlasSistemaDeLiquidacionDeAportesApplication.java
+Verifica las instalaciones:
+```bash
+java -version   # Debe mostrar Java 21+
+mvn -version    # Debe mostrar Maven 3.6+
+git --version   # Debe mostrar Git instalado
 ```
 
-## Modelo de Datos
+### Pasos de instalación
 
-### LiquidacionRequest
+1. **Clonar el repositorio:**
+```bash
+git clone https://github.com/luistriana032006/slas-sistema-de-liquidacion-de-aportes.git
+cd slas-sistema-de-liquidacion-de-aportes
+```
 
-Request DTO para calcular liquidaciones:
+2. **Compilar el proyecto:**
+```bash
+mvn clean install
+```
 
-```java
+3. **Ejecutar la aplicación:**
+```bash
+mvn spring-boot:run
+```
+
+4. **Verificar que está funcionando:**
+
+La aplicación se ejecutará en `http://localhost:8080`
+
+Abre tu navegador y accede a:
+- **Swagger UI:** http://localhost:8080/swagger-ui.html
+- **Health Check:** http://localhost:8080/actuator/health (si está habilitado)
+
+### Ejecución con JAR
+
+Alternativamente, puedes generar un JAR ejecutable:
+
+```bash
+# Generar JAR
+mvn clean package
+
+# Ejecutar JAR
+java -jar target/slas-sistema-de-liquidacion-de-aportes-0.0.1-SNAPSHOT.jar
+```
+
+## 📚 Documentación API
+
+Una vez ejecutado, accede a:
+- **Swagger UI:** http://localhost:8080/swagger-ui.html
+- **OpenAPI JSON:** http://localhost:8080/api-docs
+
+## 🧪 Ejemplo de uso
+```bash
+POST http://localhost:8080/api/slas/cotizacion
+Content-Type: application/json
+
 {
-  "ingresosMensual": 5000000.0,
+  "ingresosMensual": 8000000,
   "aporteARL": true,
+  "nivelRiesgo": "NIVEL_III",
   "aportaCCF": true,
-  "nivelRiesgo": "RIESGO_III",
-  "porcentajeCCF": 0.04
+  "porcentajeCCF": 2.0
 }
 ```
 
-### Niveles de Riesgo ARL
+**Respuesta:**
+```json
+{
+  "ibc": 3200000.0,
+  "salud": 400000.0,
+  "pension": 512000.0,
+  "fsp": 0.0,
+  "arl": 77952.0,
+  "ccf": 64000.0,
+  "total": 1053952.0
+}
+```
 
-- `RIESGO_I`: 0.522% - Actividades administrativas, financieras
-- `RIESGO_II`: 1.044% - Comercio, algunos servicios
-- `RIESGO_III`: 2.436% - Manufactura, talleres
-- `RIESGO_IV`: 4.350% - Construcción, transporte
-- `RIESGO_V`: 6.960% - Minería, alto riesgo
+## 🔮 Roadmap
 
-## Constantes del Sistema
+### v1.1 (Próxima versión)
+- [ ] Tests unitarios y de integración
+- [ ] GlobalExceptionHandler mejorado
+- [ ] Logging estructurado
+- [ ] Documentación Swagger personalizada
 
-El sistema utiliza las siguientes constantes basadas en la legislación colombiana:
+### v2.0 (Futuro)
+- [ ] Soporte para empleados en nómina
+- [ ] Historial de cálculos
+- [ ] Exportar resultados (PDF/Excel)
+- [ ] API de consulta de normativa vigente
 
-| Constante | Valor | Descripción |
-|-----------|-------|-------------|
-| SMMLV | $1,423,500 | Salario Mínimo Mensual Legal Vigente |
-| Salud | 12.5% | Aporte obligatorio a salud |
-| Pensión | 16% | Aporte obligatorio a pensión |
-| IBC Mínimo | 1 SMMLV | Ingreso Base de Cotización mínimo |
-| IBC Máximo | 25 SMMLV | Ingreso Base de Cotización máximo |
+## 👨‍💻 Autor
 
+**Luis Miguel Triana Rueda**
+- GitHub: [@tuusuario](https://github.com/luistriana032006)
+- LinkedIn: [tu-linkedin](https://www.linkedin.com/in/luis-triana-2917202a2/)
+- Email: luistriana617@gmail.com
 
-## Contribución
+## 📄 Licencia
 
-Este es un proyecto personal en desarrollo. Las sugerencias y comentarios son bienvenidos.
-
-## Licencia
-
-Este proyecto está en desarrollo. La licencia se definirá próximamente.
-
-## Notas Importantes
-
-⚠️ **Este proyecto está en desarrollo activo.** Las funcionalidades y la API pueden cambiar sin previo aviso.
-
-⚠️ Los valores de las constantes deben actualizarse anualmente según la normativa vigente.
-
-## Contacto
-
-Para consultas o sugerencias sobre el proyecto, puedes abrir un issue en el repositorio.
+MIT License
 
 ---
 
-**Última actualización:** Noviembre 2025
+**Nota:** Este proyecto fue desarrollado como parte de mi portafolio profesional para demostrar conocimientos en desarrollo backend con Spring Boot y lógica de negocio compleja.
+```
+---
