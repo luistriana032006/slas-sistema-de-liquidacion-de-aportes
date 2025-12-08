@@ -1,0 +1,119 @@
+
+### Caso exitoso completo
+
+POST http://localhost:8080/api/slas/cotizacion
+Content-Type: application/json
+
+{
+  "ingresosMensual": 8000000,
+  "aporteARL": true,
+  "nivelRiesgo": "NIVEL_III",
+  "aportaCCF": true,
+  "porcentajeCCF": 2.0
+}
+
+### Sin aportes voluntarios
+POST http://localhost:8080/api/slas/cotizacion
+Content-Type: application/json
+
+{
+  "ingresosMensual": 2000000,
+  "aporteARL": false,
+  "aportaCCF": false
+}
+
+### Solo ARL
+POST http://localhost:8080/api/slas/cotizacion
+Content-Type: application/json
+
+{
+  "ingresosMensual": 5000000,
+  "aporteARL": true,
+  "nivelRiesgo": "NIVEL_I",
+  "aportaCCF": false
+}
+
+### Solo CCF
+POST http://localhost:8080/api/slas/cotizacion
+Content-Type: application/json
+
+{
+  "ingresosMensual": 3000000,
+  "aporteARL": false,
+  "aportaCCF": true,
+  "porcentajeCCF": 0.6
+}
+
+### Error: ARL true sin nivel
+POST http://localhost:8080/api/slas/cotizacion
+Content-Type: application/json
+
+{
+  "ingresosMensual": 3000000,
+  "aporteARL": true,
+  "aportaCCF": false
+}
+
+### Error: Porcentaje CCF inválido
+POST http://localhost:8080/api/slas/cotizacion
+Content-Type: application/json
+
+{
+  "ingresosMensual": 3000000,
+  "aporteARL": false,
+  "aportaCCF": true,
+  "porcentajeCCF": 5.0
+}
+
+### Ingreso muy alto (límite máximo)
+POST http://localhost:8080/api/slas/cotizacion
+Content-Type: application/json
+
+{
+  "ingresosMensual": 100000000,
+  "aporteARL": true,
+  "nivelRiesgo": "NIVEL_V",
+  "aportaCCF": true,
+  "porcentajeCCF": 2.0
+}
+
+### Ingreso que genera FSP
+POST http://localhost:8080/api/slas/cotizacion
+Content-Type: application/json
+
+{
+  "ingresosMensual": 20000000,
+  "aporteARL": false,
+  "aportaCCF": false
+}
+
+### ingresos negativos
+
+POST http://localhost:8080/api/slas/cotizacion
+Content-Type: application/json
+
+{
+  "ingresosMensual": -1000000,
+  "aporteARL": false,
+  "aportaCCF": false
+}
+
+### ingreso cero 
+
+POST http://localhost:8080/api/slas/cotizacion
+Content-Type: application/json
+
+{
+  "ingresosMensual": 0,
+  "aporteARL": false,
+  "aportaCCF": false
+}
+
+### 
+
+POST http://localhost:8080/api/slas/cotizacion
+Content-Type: application/json
+
+{
+  "ingresosMensual": 3000000
+}

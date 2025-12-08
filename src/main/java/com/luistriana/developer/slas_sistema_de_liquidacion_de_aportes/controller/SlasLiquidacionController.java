@@ -25,7 +25,7 @@ public class SlasLiquidacionController {
     // metodo que recibe la peticion
 
     @PostMapping("/cotizacion")
-    public LiquidacionResponse verAportes(@Valid@RequestBody LiquidacionRequest liquidacion) {
+    public LiquidacionResponse verAportes(@Valid @RequestBody LiquidacionRequest liquidacion) {
         return slas.calculoSlas(liquidacion);
     }
 
