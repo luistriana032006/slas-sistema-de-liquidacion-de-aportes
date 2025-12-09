@@ -1,4 +1,8 @@
-# SLAS - Sistema de Liquidación de Aportes a Seguridad Social
+<div align="center">
+  <img src="src/main/resources/static/readme_swagger.png" alt="SLAS Logo" width="200"/>
+
+  # SLAS - Sistema de Liquidación de Aportes a Seguridad Social
+</div>
 
 ## 📋 Descripción
 

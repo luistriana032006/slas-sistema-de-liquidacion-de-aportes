@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLAS - Sistema de Liquidación de Aportes</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="/readme_swagger.png" alt="SLAS Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>SLAS</h1>
+                    <p>Sistema de Liquidación de Aportes a Seguridad Social</p>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="#calculadora" class="nav-link active">Calculadora</a>
+                <a href="#documentacion" class="nav-link">Documentación</a>
+                <a href="/swagger-ui.html" class="nav-link" target="_blank">API Swagger</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>Calcula tus aportes a seguridad social</h2>
+            <p>Para trabajadores independientes en Colombia bajo régimen de prestación de servicios</p>
+        </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section id="calculadora" class="calculator-section">
+        <div class="container">
+            <div class="calculator-card">
+                <h3>Calculadora de Aportes</h3>
+
+                <form id="calculatorForm" class="calculator-form">
+                    <!-- Ingreso Mensual -->
+                    <div class="form-group">
+                        <label for="ingresosMensual">Ingreso Mensual Bruto (COP) *</label>
+                        <input
+                            type="number"
+                            id="ingresosMensual"
+                            name="ingresosMensual"
+                            placeholder="Ej: 5000000"
+                            required
+                            min="0"
+                            step="1000"
+                        >
+                        <small>Ingreso mensual recibido por prestación de servicios</small>
+                    </div>
+
+                    <!-- ARL -->
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="aporteARL" name="aporteARL">
+                            <span>Aportar a ARL (Administradora de Riesgos Laborales)</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group conditional" id="nivelRiesgoGroup" style="display: none;">
+                        <label for="nivelRiesgo">Nivel de Riesgo Laboral</label>
+                        <select id="nivelRiesgo" name="nivelRiesgo">
+                            <option value="">Seleccionar nivel</option>
+                            <option value="NIVEL_I">Nivel I - Riesgo Mínimo (0.522%)</option>
+                            <option value="NIVEL_II">Nivel II - Riesgo Bajo (1.044%)</option>
+                            <option value="NIVEL_III">Nivel III - Riesgo Medio (2.436%)</option>
+                            <option value="NIVEL_IV">Nivel IV - Riesgo Alto (4.350%)</option>
+                            <option value="NIVEL_V">Nivel V - Riesgo Máximo (6.960%)</option>
+                        </select>
+                    </div>
+
+                    <!-- CCF -->
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="aportaCCF" name="aportaCCF">
+                            <span>Aportar a CCF (Caja de Compensación Familiar)</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group conditional" id="porcentajeCCFGroup" style="display: none;">
+                        <label for="porcentajeCCF">Porcentaje de Cotización CCF</label>
+                        <select id="porcentajeCCF" name="porcentajeCCF">
+                            <option value="">Seleccionar porcentaje</option>
+                            <option value="0.6">0.6% - Aporte Básico</option>
+                            <option value="2.0">2.0% - Aporte Completo</option>
+                        </select>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Calcular Aportes</button>
+                        <button type="reset" class="btn btn-secondary">Limpiar</button>
+                    </div>
+                </form>
+
+                <!-- Loading Indicator -->
+                <div id="loading" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Calculando...</p>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="alert alert-error" style="display: none;"></div>
+
+                <!-- Results -->
+                <div id="results" class="results" style="display: none;">
+                    <h3>Resultados de la Liquidación</h3>
+
+                    <div class="result-card">
+                        <div class="result-item">
+                            <span class="result-label">IBC (Ingreso Base de Cotización)</span>
+                            <span class="result-value" id="ibcValue">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="result-section">
+                        <h4>Aportes Obligatorios</h4>
+                        <div class="result-item">
+                            <span class="result-label">Salud (12.5%)</span>
+                            <span class="result-value" id="saludValue">$0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Pensión (16%)</span>
+                            <span class="result-value" id="pensionValue">$0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">FSP (Fondo Solidaridad Pensional)</span>
+                            <span class="result-value" id="fspValue">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="result-section" id="voluntariosSection">
+                        <h4>Aportes Voluntarios</h4>
+                        <div class="result-item" id="arlResult" style="display: none;">
+                            <span class="result-label">ARL</span>
+                            <span class="result-value" id="arlValue">$0</span>
+                        </div>
+                        <div class="result-item" id="ccfResult" style="display: none;">
+                            <span class="result-label">CCF</span>
+                            <span class="result-value" id="ccfValue">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="result-total">
+                        <span class="result-label">TOTAL A PAGAR</span>
+                        <span class="result-value total" id="totalValue">$0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="documentacion" class="documentation-section">
+        <div class="container">
+            <h3>Información sobre los Aportes</h3>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>IBC - Ingreso Base de Cotización</h4>
+                    <p>Se calcula como el <strong>40%</strong> del ingreso mensual del trabajador independiente.</p>
+                    <ul>
+                        <li>Mínimo: 1 SMMLV ($1,423,500)</li>
+                        <li>Máximo: 25 SMMLV ($35,587,500)</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h4>Aportes Obligatorios</h4>
+                    <ul>
+                        <li><strong>Salud:</strong> 12.5% del IBC</li>
+                        <li><strong>Pensión:</strong> 16% del IBC</li>
+                        <li><strong>FSP:</strong> 0% - 2% según IBC (tabla progresiva)</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h4>ARL - Riesgos Laborales</h4>
+                    <p>Aporte voluntario según el nivel de riesgo de la actividad:</p>
+                    <ul>
+                        <li>Nivel I: 0.522%</li>
+                        <li>Nivel II: 1.044%</li>
+                        <li>Nivel III: 2.436%</li>
+                        <li>Nivel IV: 4.350%</li>
+                        <li>Nivel V: 6.960%</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h4>CCF - Caja de Compensación</h4>
+                    <p>Aporte voluntario con dos opciones:</p>
+                    <ul>
+                        <li><strong>Básico:</strong> 0.6% del IBC</li>
+                        <li><strong>Completo:</strong> 2.0% del IBC</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 SLAS - Sistema de Liquidación de Aportes a Seguridad Social</p>
+            <p>Desarrollado por <strong>Luis Miguel Triana Rueda</strong></p>
+            <div class="footer-links">
+                <a href="https://github.com/luistriana032006/slas-sistema-de-liquidacion-de-aportes" target="_blank">GitHub</a>
+                <a href="https://www.linkedin.com/in/luis-triana-2917202a2/" target="_blank">LinkedIn</a>
+                <a href="/swagger-ui.html" target="_blank">API Documentation</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/script.js"></script>
+</body>
+</html>
