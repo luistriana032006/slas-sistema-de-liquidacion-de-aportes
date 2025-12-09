@@ -63,7 +63,7 @@ public class SlasServiceImpl implements SlasService {
         double arl = 0.0;
         double ccf = 0.0;
 
-        double ibc = porcentajeIBC(request.getIngresos());
+        double ibc = porcentajeIBC(request.getIngresosMensual());
         double pension = porcentajePension(ibc);
         double salud = porcentajeSalud(ibc);
 
@@ -241,9 +241,9 @@ public class SlasServiceImpl implements SlasService {
         // validaciones de ingreso
 
  // Validación de ingreso
-    if (request.getIngresos() <= 0) {  // Cambié < a <=
+    if (request.getIngresosMensual() <= 0) {  // Cambié < a <=
         throw new datosInvalidosException(
-            "El ingreso debe ser mayor a cero. Recibido: " + request.getIngresos());
+            "El ingreso debe ser mayor a cero. Recibido: " + request.getIngresosMensual());
     }
 
     // Validación CCF: si aporta TRUE pero porcentaje es null

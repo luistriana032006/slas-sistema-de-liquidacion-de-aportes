@@ -6,23 +6,29 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 /**
- * DTO (Data Transfer Object) para recibir los datos de solicitud de liquidación.
+ * DTO (Data Transfer Object) para recibir los datos de solicitud de
+ * liquidación.
  * <p>
  * Esta clase contiene todos los datos necesarios para calcular los aportes
  * a seguridad social de un trabajador independiente.
  * </p>
  *
- * <p><strong>Campos obligatorios:</strong></p>
+ * <p>
+ * <strong>Campos obligatorios:</strong>
+ * </p>
  * <ul>
- *   <li>ingresosMensual: Debe ser positivo y no nulo</li>
- *   <li>aporteARL: Indica si desea aportar a ARL (true/false)</li>
- *   <li>aportaCCF: Indica si desea aportar a CCF (true/false)</li>
+ * <li>ingresosMensual: Debe ser positivo y no nulo</li>
+ * <li>aporteARL: Indica si desea aportar a ARL (true/false)</li>
+ * <li>aportaCCF: Indica si desea aportar a CCF (true/false)</li>
  * </ul>
  *
- * <p><strong>Campos condicionales:</strong></p>
+ * <p>
+ * <strong>Campos condicionales:</strong>
+ * </p>
  * <ul>
- *   <li>nivelRiesgo: Requerido solo si aporteARL es true</li>
- *   <li>porcentajeCCF: Requerido solo si aportaCCF es true (valores: 0.6 o 2.0)</li>
+ * <li>nivelRiesgo: Requerido solo si aporteARL es true</li>
+ * <li>porcentajeCCF: Requerido solo si aportaCCF es true (valores: 0.6 o
+ * 2.0)</li>
  * </ul>
  *
  * @author Luis Miguel Triana Rueda
@@ -68,10 +74,6 @@ public class LiquidacionRequest {
      */
     private Double porcentajeCCF;
 
-    public Double getIngresos() {
-        return ingresosMensual;
-    }
-
     public Double getIngresosMensual() {
         return ingresosMensual;
     }
@@ -95,10 +97,6 @@ public class LiquidacionRequest {
     public void setPorcentajeCCF(Double porcentajeCCF) {
         this.porcentajeCCF = porcentajeCCF;
     }
- 
-    public void setIngresos(Double ingresos) {
-        this.ingresosMensual = ingresos;
-    }
 
     public Boolean getAporteARL() {
         return aporteARL;
@@ -120,10 +118,12 @@ public class LiquidacionRequest {
      * Constructor con todos los parámetros.
      *
      * @param ingresosMensual ingreso mensual bruto del trabajador
-     * @param aporteARL indica si aporta a ARL
-     * @param aportaCCF indica si aporta a CCF
-     * @param nivelRiesgo nivel de riesgo laboral (opcional, requerido si aporteARL es true)
-     * @param porcentajeCCF porcentaje CCF (opcional, requerido si aportaCCF es true)
+     * @param aporteARL       indica si aporta a ARL
+     * @param aportaCCF       indica si aporta a CCF
+     * @param nivelRiesgo     nivel de riesgo laboral (opcional, requerido si
+     *                        aporteARL es true)
+     * @param porcentajeCCF   porcentaje CCF (opcional, requerido si aportaCCF es
+     *                        true)
      */
     public LiquidacionRequest(Double ingresosMensual, Boolean aporteARL, Boolean aportaCCF,
             RiesgoLaboralARL nivelRiesgo, Double porcentajeCCF) {
