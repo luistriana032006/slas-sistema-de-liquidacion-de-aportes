@@ -8,7 +8,9 @@
 
 API REST para calcular aportes a seguridad social de trabajadores independientes en Colombia (contrato de prestación de servicios).
 
-**Versión actual:** 1.0.0 (en desarrollo activo)
+**Versión actual:** 1.1.0 (en desarrollo activo)
+
+> **Normativa vigente:** Actualizado con la normativa **2026** — SMMLV $1,750,905 según Decreto 1469 del 29 de diciembre de 2025.
 
 ## 🚀 Características v1.0
 

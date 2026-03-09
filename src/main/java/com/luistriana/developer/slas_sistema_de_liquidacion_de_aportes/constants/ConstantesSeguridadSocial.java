@@ -17,30 +17,31 @@ package com.luistriana.developer.slas_sistema_de_liquidacion_de_aportes.constant
  * </ul>
  *
  * @author Luis Miguel Triana Rueda
- * @version 1.0
- * @since 2025-01-01
+ * @version 1.1
+ * @since 2026-01-01
  */
 public class ConstantesSeguridadSocial {
 
     /**
-     * Salario Mínimo Mensual Legal Vigente (SMMLV) para el año 2025.
-     * Valor: $1,423,500 COP
+     * Salario Mínimo Mensual Legal Vigente (SMMLV) para el año 2026.
+     * Decreto 1469 del 29 de diciembre de 2025.
+     * Valor: $1,750,905 COP
      */
-    public static final double SMMLV = 1_423_500;
+    public static final double SMMLV = 1_750_905;
 
     /**
      * Límite mínimo para el cálculo del IBC.
      * Equivale a 1 SMMLV.
-     * Valor: $1,423,500 COP
+     * Valor: $1,750,905 COP
      */
-    public static final double MIN_CALCULO_IBC = 1_423_500;
+    public static final double MIN_CALCULO_IBC = 1_750_905;
 
     /**
      * Límite máximo para el cálculo del IBC.
      * Equivale a 25 SMMLV.
-     * Valor: $35,587,500 COP
+     * Valor: $43,772,625 COP
      */
-    public static final double MAX_CALCULO_IBC = 35_587_500;
+    public static final double MAX_CALCULO_IBC = 43_772_625;
 
     /**
      * Porcentaje base para calcular el IBC de trabajadores independientes.
